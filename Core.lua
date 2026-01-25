@@ -1,5 +1,7 @@
 local addonName, addon = ...
-
+addon.shortName = "CT"
+addon.longName = "Currency Tracker"
+addon.version = "1.0.0"
 CurrencyTracker = LibStub("AceAddon-3.0"):NewAddon(
     addonName,
     "AceConsole-3.0",
@@ -86,7 +88,7 @@ function CurrencyTracker:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("CurrencyTrackerDB", defaults, true)
 
     self:SetupOptions()
-    self:RegisterChatCommand("ct", "OpenOptions")
+    self:RegisterChatCommand(addon.shortName:lower(), "OpenOptions")
 
     -- Register profile change callbacks
     self.db.RegisterCallback(self, "OnProfileChanged", "RequestUpdate")
@@ -96,6 +98,7 @@ function CurrencyTracker:OnInitialize()
 
     CurrencyTracker_Mover:Initialize()
     CurrencyTracker_Display:Initialize()
+    DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00["..addon.shortName.."]|r ".. addon.longName .." v".. addon.version .. " - |cff00ff00/".. addon.shortName:lower() .. "|r")
 end
 
 function CurrencyTracker:OnEnable()
