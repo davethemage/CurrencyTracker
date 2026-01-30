@@ -48,7 +48,6 @@ function CurrencyTracker_Display:ApplyVisibility()
 end
 
 function CurrencyTracker_Display:Update()
-    print("Update")
     self:ApplyVisibility()
     if not CT:IsSafe() then return end
 
