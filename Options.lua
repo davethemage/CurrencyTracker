@@ -31,6 +31,15 @@ local function SwapCurrencies(id1, id2)
     t1.order, t2.order = t2.order, t1.order
 end
 
+-- Fonts from LSM
+local function fontValues()
+    local fonts = LSM:HashTable("font")
+    local values = {}
+    for name, _ in pairs(fonts) do
+        values[name] = name -- key = label
+    end
+    return values
+end
 -- -------------------------------------------------
 -- Add Currency dropdown
 -- -------------------------------------------------
@@ -174,10 +183,9 @@ function CT:SetupOptions()
                     },
                     font = {
                         type = "select",
-                        dialogControl = "LSM30_Font",
                         name = "Font",
                         width = 1,
-                        values = LSM:HashTable("font"),
+                        values = function() return fontValues() end,
                         get = function() return CT.db.profile.display.font end,
                         set = function(_, v) CT.db.profile.display.font = v; CT:RequestUpdate() end,
                         order = 4,
