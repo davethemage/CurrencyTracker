@@ -61,7 +61,7 @@ end
 -- -------------------------------------------------
 -- Build tracked currencies
 -- -------------------------------------------------
-local function RebuildTrackedCurrencies()
+function CT:RebuildTrackedCurrencies()
     if not options then return end
     local trackedGroup = options.args.currencies.args.tracked.args
     wipe(trackedGroup)
@@ -91,7 +91,7 @@ local function RebuildTrackedCurrencies()
                             for i, row in ipairs(ordered) do
                                 if row.id == currencyID and i > 1 then
                                     SwapCurrencies(currencyID, ordered[i-1].id)
-                                    RebuildTrackedCurrencies()
+                                    CT:RebuildTrackedCurrencies()
                                     CT:RequestUpdate()
                                     break
                                 end
@@ -111,7 +111,7 @@ local function RebuildTrackedCurrencies()
                             for i, row in ipairs(ordered) do
                                 if row.id == currencyID and i < #ordered then
                                     SwapCurrencies(currencyID, ordered[i+1].id)
-                                    RebuildTrackedCurrencies()
+                                    CT:RebuildTrackedCurrencies()
                                     CT:RequestUpdate()
                                     break
                                 end
@@ -143,7 +143,7 @@ local function RebuildTrackedCurrencies()
                         width = 0.1, -- right side
                         func = function()
                             CT.db.profile.currencies[currencyID] = nil
-                            RebuildTrackedCurrencies()
+                            CT:RebuildTrackedCurrencies()
                             CT:RequestUpdate()
                         end,
                         image = "Interface\\Addons\\CurrencyTracker\\Media\\delete.tga",
@@ -428,7 +428,18 @@ function CT:SetupOptions()
                                 order = GetNextOrder(),
                                 color = { r = 1, g = 1, b = 1 },
                             }
-                            RebuildTrackedCurrencies()
+                            CT:RebuildTrackedCurrencies()
+                            CT:RequestUpdate()
+                        end,
+                    },
+                    reset = {
+                        type = "execute",
+                        name = "Reset to default",
+                        order = 10,
+                        func = function()
+                            CT.db.profile.currencies = {}
+                            CT:AddDefaultCurrenciesIfNeeded()
+                            CT:RebuildTrackedCurrencies()
                             CT:RequestUpdate()
                         end,
                     },
@@ -436,7 +447,7 @@ function CT:SetupOptions()
                         type = "group",
                         name = "Tracked Currencies",
                         inline = true,
-                        order = 2,
+                        order = 90,
                         args = {},
                     },
                 },
@@ -452,5 +463,5 @@ function CT:SetupOptions()
     LibStub("AceConfig-3.0"):RegisterOptionsTable(addonName, options)
     LibStub("AceConfigDialog-3.0"):AddToBlizOptions(addonName, addonName)
 
-    RebuildTrackedCurrencies()
+    CT:RebuildTrackedCurrencies()
 end
