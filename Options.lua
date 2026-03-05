@@ -51,7 +51,7 @@ local function GetAvailableCurrencies()
     for i = 1, size do
         local info = C_CurrencyInfo.GetCurrencyListInfo(i)
         if info and info.currencyID and not CT.db.profile.currencies[info.currencyID] and not info.isHeader then
-            values[info.currencyID] = info.name
+            values[info.currencyID] = "|T" .. info.iconFileID .. ":16:16:0:0|t" .. info.name
         end
     end
 
@@ -77,7 +77,7 @@ function CT:RebuildTrackedCurrencies()
 
             trackedGroup["currency_" .. currencyID] = {
                 type = "group",
-                name = info.name,
+                name = "|T" .. info.iconFileID .. ":16:16:0:0|t" .. info.name,
                 inline = true,
                 order = index,
                 args = {
@@ -225,6 +225,13 @@ function CT:SetupOptions()
                         get = function() return CT.db.profile.display.padding end,
                         set = function(_, v) CT.db.profile.display.padding = v; CT:RequestUpdate() end,
                         order = 7,
+                    },
+                    zoom_icons = {
+                        type = "toggle",
+                        name = "Zoom Icons",
+                        get = function() return CT.db.profile.display.zoom or false end,
+                        set = function(_, v) CT.db.profile.display.zoom = v; CT:RequestUpdate() end,
+                        order = 8,
                     },
                     spacer1= {
                         type = "description",
@@ -432,9 +439,34 @@ function CT:SetupOptions()
                             CT:RequestUpdate()
                         end,
                     },
+                    add_id = {
+                        type = "input",
+                        name = "Currency ID",
+                        order = 2,
+                        width = 0.75,
+                        get = function() return "" end,
+                        set = function(_, value)
+                            local currencyID = tonumber(value)
+                            if CT.db.profile.currencies[currencyID] then
+                                print("Currency already being tracked")
+                                return
+                            end
+                            if C_CurrencyInfo.GetCurrencyInfo(currencyID) == nil then
+                                print("Invalid Currency")
+                                return
+                            end
+                            CT.db.profile.currencies[currencyID] = {
+                                order = GetNextOrder(),
+                                color = { r = 1, g = 1, b = 1 },
+                            }
+                            CT:RebuildTrackedCurrencies()
+                            CT:RequestUpdate()
+                        end
+                    },
                     reset = {
                         type = "execute",
                         name = "Reset to default",
+                        width = 0.75,
                         order = 10,
                         func = function()
                             CT.db.profile.currencies = {}

@@ -79,6 +79,12 @@ function CurrencyTracker_Display:Update()
 
         -- Icon
         row.icon:SetTexture(info.iconFileID)
+        if d.zoom then
+            local zoom_level = 0.1
+            row.icon:SetTexCoord(zoom_level, 1 - zoom_level, zoom_level, 1 - zoom_level)
+        else
+            row.icon:SetTexCoord(0, 1, 0, 1)
+        end
         row.icon:SetSize(d.iconSize, d.iconSize)
         row.icon:ClearAllPoints()
         row.icon:SetPoint("LEFT", row, "LEFT")

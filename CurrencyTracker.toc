@@ -2,7 +2,7 @@
 ## Title: CurrencyTracker
 ## Notes: Customizable currency tracker
 ## Author: Davethemage
-## Version: 1.0.2
+## Version: 1.0.4
 ## SavedVariables: CurrencyTrackerDB
 ## IconTexture: Interface\AddOns\CurrencyTracker\Media\icon.tga
 

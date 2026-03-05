@@ -1,7 +1,7 @@
 local addonName, addon = ...
 addon.shortName = "CT"
 addon.longName = "Currency Tracker"
-addon.version = "1.0.2"
+addon.version = "1.0.4"
 CurrencyTracker = LibStub("AceAddon-3.0"):NewAddon(
     addonName,
     "AceConsole-3.0",
@@ -27,6 +27,7 @@ local defaults = {
             font = "Friz Quadrata TT",
             hideEmpty = false,
             unlocked = false,
+            zoom = false,
         },
         currencies = {
             -- [CURRENCY_ID] = { 
