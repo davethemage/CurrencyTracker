@@ -115,13 +115,25 @@ function CurrencyTracker_Display:Update()
         -- Positioning
         row:ClearAllPoints()
         if lastRow then
-            if d.grow == "LEFT" or d.grow == "RIGHT" then
+            if d.grow == "RIGHT" then
                 row:SetPoint("LEFT", lastRow, "RIGHT", d.padding, 0)
+            elseif d.grow == "LEFT" then
+                row:SetPoint("RIGHT", lastRow, "LEFT", -d.padding, 0)
+            elseif d.grow == "UP" then
+                row:SetPoint("BOTTOM", lastRow, "TOP", 0, d.padding)
             else
                 row:SetPoint("TOP", lastRow, "BOTTOM", 0, -d.padding)
             end
         else
-            row:SetPoint("LEFT", CurrencyTracker_Mover.frame, "LEFT")
+            if d.grow == "RIGHT" then
+                row:SetPoint("LEFT", CurrencyTracker_Mover.frame, "LEFT")
+            elseif d.grow == "LEFT" then
+                row:SetPoint("RIGHT", CurrencyTracker_Mover.frame, "RIGHT")
+            elseif d.grow == "UP" then
+                row:SetPoint("BOTTOM", CurrencyTracker_Mover.frame, "BOTTOM")
+            else
+                row:SetPoint("TOP", CurrencyTracker_Mover.frame, "TOP")
+            end
         end
 
         row:Show()

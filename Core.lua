@@ -1,7 +1,7 @@
 local addonName, addon = ...
 addon.shortName = "CT"
 addon.longName = "Currency Tracker"
-addon.version = "1.0.4"
+addon.version = "1.0.5"
 CurrencyTracker = LibStub("AceAddon-3.0"):NewAddon(
     addonName,
     "AceConsole-3.0",
