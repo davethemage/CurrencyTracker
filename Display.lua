@@ -97,7 +97,7 @@ function CurrencyTracker_Display:Update()
         -- Text color
         local color = data.color or { r = 1, g = 1, b = 1 }
         local r, g, b = color.r, color.g, color.b
-        if info.quantity == 0 or info.quantity == info.maxQuantity then
+        if info.quantity == 0 or info.totalEarned == info.maxQuantity then
             r, g, b = 1, 0, 0
         end
 
