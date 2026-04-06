@@ -37,6 +37,8 @@ end
 -- Combat visibility
 -- -----------------------
 function CurrencyTracker_Display:ApplyVisibility()
+    --if already in combat, do not update visibility
+    if InCombatLockdown() or UnitIsDeadOrGhost("player") then return end
     local frame = self.parent
     UnregisterStateDriver(frame, "visibility")
 
