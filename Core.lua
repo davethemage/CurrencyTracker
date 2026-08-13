@@ -1,7 +1,7 @@
 local addonName, addon = ...
 addon.shortName = "CT"
 addon.longName = "Currency Tracker"
-addon.version = "1.0.6"
+addon.version = "1.1.0"
 CurrencyTracker = LibStub("AceAddon-3.0"):NewAddon(
     addonName,
     "AceConsole-3.0",
@@ -42,8 +42,8 @@ local defaults = {
     }
 }
 local default_currencies  = {
-    -- Midnight S1
-    [3383] = { -- Adventurer
+    -- Midnight S2
+    [3418] ={ --Voidcore
         ["order"] = 1,
         ["color"] = {
             ["r"] = 1,
@@ -51,38 +51,87 @@ local default_currencies  = {
             ["b"] = 1,
         },
     },
-    [3341] = { -- Veteran
+    [3442] = { -- Adventurer
         ["order"] = 2,
+        ["color"] = {
+            ["r"] = 1,
+            ["g"] = 1,
+            ["b"] = 1,
+        },
+    },
+    [3443] = { -- Veteran
+        ["order"] = 3,
         ["color"] = {
             ["r"] = 0.1176470667123795,
             ["g"] = 1,
             ["b"] = 0,
         },
     },
-    [3343] = {  -- Champion
-        ["order"] = 3,
+    [3444] = {  -- Champion
+        ["order"] = 4,
         ["color"] = {
             ["r"] = 0,
             ["g"] = 0.4392157196998596,
             ["b"] = 0.8666667342185974,
         },
     },
-    [3345] = { -- Heroic
-        ["order"] = 4,
+    [3445] = { -- Heroic
+        ["order"] = 5,
         ["color"] = {
             ["r"] = 0.6392157077789307,
             ["g"] = 0.207843154668808,
             ["b"] = 0.9333333969116211,
         },
     },
-    [3347] = { -- Mythic
-        ["order"] = 5,
+    [3446] = { -- Mythic
+        ["order"] = 6,
         ["color"] = {
             ["r"] = 1,
             ["g"] = 0.5,
             ["b"] = 0,
         },
     },
+    -- Midnight S1
+    -- [3383] = { -- Adventurer
+    --     ["order"] = 1,
+    --     ["color"] = {
+    --         ["r"] = 1,
+    --         ["g"] = 1,
+    --         ["b"] = 1,
+    --     },
+    -- },
+    -- [3341] = { -- Veteran
+    --     ["order"] = 2,
+    --     ["color"] = {
+    --         ["r"] = 0.1176470667123795,
+    --         ["g"] = 1,
+    --         ["b"] = 0,
+    --     },
+    -- },
+    -- [3343] = {  -- Champion
+    --     ["order"] = 3,
+    --     ["color"] = {
+    --         ["r"] = 0,
+    --         ["g"] = 0.4392157196998596,
+    --         ["b"] = 0.8666667342185974,
+    --     },
+    -- },
+    -- [3345] = { -- Heroic
+    --     ["order"] = 4,
+    --     ["color"] = {
+    --         ["r"] = 0.6392157077789307,
+    --         ["g"] = 0.207843154668808,
+    --         ["b"] = 0.9333333969116211,
+    --     },
+    -- },
+    -- [3347] = { -- Mythic
+    --     ["order"] = 5,
+    --     ["color"] = {
+    --         ["r"] = 1,
+    --         ["g"] = 0.5,
+    --         ["b"] = 0,
+    --     },
+    -- },
     -- TWW S3
     -- [3008] = { -- Valorstones
     --     ["order"] = 1,
