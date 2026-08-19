@@ -42,17 +42,34 @@ local function fontValues()
 end
 -- -------------------------------------------------
 -- Add Currency dropdown
+-- We need to expand all currencies to be able to itterate
+-- We close the headers we opened after we are done
 -- -------------------------------------------------
 local function GetAvailableCurrencies()
     local values = {}
+    local collapsedHeaders = {}
     local size = C_CurrencyInfo.GetCurrencyListSize()
     if not size then return values end
 
-    for i = 1, size do
+    local i = 1
+    while i <= size do
         local info = C_CurrencyInfo.GetCurrencyListInfo(i)
-        if info and info.currencyID and not CT.db.profile.currencies[info.currencyID] and not info.isHeader then
-            values[info.currencyID] = "|T" .. info.iconFileID .. ":16:16:0:0|t" .. info.name
+        if info then
+            if info.isHeader then
+                if not info.isHeaderExpanded then
+                    C_CurrencyInfo.ExpandCurrencyList(i, true)
+                    table.insert(collapsedHeaders, i)
+                    size = C_CurrencyInfo.GetCurrencyListSize()
+                end
+            elseif info.currencyID and not CT.db.profile.currencies[info.currencyID] then
+                values[info.currencyID] = "|T" .. info.iconFileID .. ":16:16:0:0|t" .. info.name
+            end
         end
+        i = i + 1
+    end
+
+    for headerIndex = #collapsedHeaders, 1, -1 do
+        C_CurrencyInfo.ExpandCurrencyList(collapsedHeaders[headerIndex], false)
     end
 
     return values
@@ -431,12 +448,14 @@ function CT:SetupOptions()
                         values = GetAvailableCurrencies,
                         set = function(_, currencyID)
                             currencyID = tonumber(currencyID)
-                            CT.db.profile.currencies[currencyID] = {
-                                order = GetNextOrder(),
-                                color = { r = 1, g = 1, b = 1 },
-                            }
-                            CT:RebuildTrackedCurrencies()
-                            CT:RequestUpdate()
+                            if currencyID then
+                                CT.db.profile.currencies[currencyID] = {
+                                    order = GetNextOrder(),
+                                    color = { r = 1, g = 1, b = 1 },
+                                }
+                                CT:RebuildTrackedCurrencies()
+                                CT:RequestUpdate()
+                            end
                         end,
                     },
                     add_id = {

@@ -1,7 +1,7 @@
 local addonName, addon = ...
 addon.shortName = "CT"
 addon.longName = "Currency Tracker"
-addon.version = "1.1.0"
+addon.version = "1.1.1"
 CurrencyTracker = LibStub("AceAddon-3.0"):NewAddon(
     addonName,
     "AceConsole-3.0",
@@ -187,6 +187,7 @@ end
 -- -----------------------
 function CurrencyTracker:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("CurrencyTrackerDB", defaults, true)
+    self:AddDefaultCurrenciesIfNeeded()
     self:SetupOptions()
     self:RegisterChatCommand(addon.shortName:lower(), "OpenOptions")
 
@@ -202,11 +203,21 @@ function CurrencyTracker:OnInitialize()
 end
 
 function CurrencyTracker:OnEnable()
-    self:RegisterEvent("CURRENCY_DISPLAY_UPDATE", "RequestUpdate")
-    self:RegisterEvent("PLAYER_ENTERING_WORLD", "RequestUpdate")
+    self:RegisterEvent("CURRENCY_DISPLAY_UPDATE", "RefreshOptions")
+    self:RegisterEvent("PLAYER_ENTERING_WORLD", "RefreshOptions")
+    self:RegisterEvent("PLAYER_LOGOUT", "SavePosition")
     self:RegisterEvent("PLAYER_REGEN_DISABLED", "RequestUpdate")
     self:RegisterEvent("PLAYER_REGEN_ENABLED", "RequestUpdate")
-    self:AddDefaultCurrenciesIfNeeded()
+end
+
+function CurrencyTracker:SavePosition()
+    CurrencyTracker_Mover:SavePosition()
+end
+
+function CurrencyTracker:RefreshOptions()
+    self:RebuildTrackedCurrencies()
+    LibStub("AceConfigRegistry-3.0"):NotifyChange(addonName)
+    self:RequestUpdate()
 end
 
 function CurrencyTracker:AddDefaultCurrenciesIfNeeded()

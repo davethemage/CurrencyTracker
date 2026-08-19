@@ -3,6 +3,16 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 CurrencyTracker_Mover = CurrencyTracker_Mover or {}
 
+function CurrencyTracker_Mover:SavePosition()
+    if not self.frame then return end
+
+    local _, _, _, x, y = self.frame:GetPoint()
+    if x and y then
+        CT.db.profile.display.x = x
+        CT.db.profile.display.y = y
+    end
+end
+
 function CurrencyTracker_Mover:Initialize()
     local f = CreateFrame("Frame", "CurrencyTrackerMover", UIParent)
     f:SetSize(1, 1)
@@ -20,9 +30,7 @@ function CurrencyTracker_Mover:Initialize()
 
     f:SetScript("OnDragStop", function()
         f:StopMovingOrSizing()
-        local _, _, _, x, y = f:GetPoint()
-        CT.db.profile.display.x = x
-        CT.db.profile.display.y = y
+        self:SavePosition()
     end)
 
     -- Background texture (modern replacement for SetBackdrop)
