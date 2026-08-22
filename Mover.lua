@@ -6,11 +6,45 @@ CurrencyTracker_Mover = CurrencyTracker_Mover or {}
 function CurrencyTracker_Mover:SavePosition()
     if not self.frame then return end
 
-    local _, _, _, x, y = self.frame:GetPoint()
-    if x and y then
-        CT.db.profile.display.x = x
-        CT.db.profile.display.y = y
+    local d = CT.db.profile.display
+    local centerX, centerY = self.frame:GetCenter()
+    if not centerX or not centerY then return end
+
+    local frameWidth, frameHeight = self.frame:GetSize()
+    local screenWidth, screenHeight = UIParent:GetSize()
+
+    local screenAnchorX = 0
+    if d.screenAnchor:find("RIGHT") then
+        screenAnchorX = screenWidth
+    elseif not d.screenAnchor:find("LEFT") then
+        screenAnchorX = screenWidth / 2
     end
+
+    local trackerOffsetX = 0
+    if d.trackerAnchor:find("RIGHT") then
+        trackerOffsetX = frameWidth / 2
+    elseif not d.trackerAnchor:find("LEFT") then
+        trackerOffsetX = 0
+    else
+        trackerOffsetX = -frameWidth / 2
+    end
+
+    local screenAnchorY = 0
+    if d.screenAnchor:find("TOP") then
+        screenAnchorY = screenHeight
+    elseif not d.screenAnchor:find("BOTTOM") then
+        screenAnchorY = screenHeight / 2
+    end
+
+    local trackerOffsetY = 0
+    if d.trackerAnchor:find("TOP") then
+        trackerOffsetY = frameHeight / 2
+    elseif d.trackerAnchor:find("BOTTOM") then
+        trackerOffsetY = -frameHeight / 2
+    end
+
+    d.x = centerX - screenAnchorX + trackerOffsetX
+    d.y = centerY - screenAnchorY + trackerOffsetY
 end
 
 function CurrencyTracker_Mover:Initialize()
@@ -43,6 +77,7 @@ function CurrencyTracker_Mover:Initialize()
     self.frame = f
 
     self:Reset()
+    self:SetUnlocked(CT.db.profile.display.unlocked)
 end
 
 -- -----------------------
