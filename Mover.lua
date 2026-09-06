@@ -3,10 +3,17 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 CurrencyTracker_Mover = CurrencyTracker_Mover or {}
 
+local function NormalizeAnchors(display)
+    display.screenAnchor = display.screenAnchor or "CENTER"
+    display.trackerAnchor = display.trackerAnchor or "CENTER"
+    return display.screenAnchor, display.trackerAnchor
+end
+
 function CurrencyTracker_Mover:SavePosition()
     if not self.frame then return end
 
     local d = CT.db.profile.display
+    local screenAnchor, trackerAnchor = NormalizeAnchors(d)
     local centerX, centerY = self.frame:GetCenter()
     if not centerX or not centerY then return end
 
@@ -14,32 +21,32 @@ function CurrencyTracker_Mover:SavePosition()
     local screenWidth, screenHeight = UIParent:GetSize()
 
     local screenAnchorX = 0
-    if d.screenAnchor:find("RIGHT") then
+    if screenAnchor:find("RIGHT") then
         screenAnchorX = screenWidth
-    elseif not d.screenAnchor:find("LEFT") then
+    elseif not screenAnchor:find("LEFT") then
         screenAnchorX = screenWidth / 2
     end
 
     local trackerOffsetX = 0
-    if d.trackerAnchor:find("RIGHT") then
+    if trackerAnchor:find("RIGHT") then
         trackerOffsetX = frameWidth / 2
-    elseif not d.trackerAnchor:find("LEFT") then
+    elseif not trackerAnchor:find("LEFT") then
         trackerOffsetX = 0
     else
         trackerOffsetX = -frameWidth / 2
     end
 
     local screenAnchorY = 0
-    if d.screenAnchor:find("TOP") then
+    if screenAnchor:find("TOP") then
         screenAnchorY = screenHeight
-    elseif not d.screenAnchor:find("BOTTOM") then
+    elseif not screenAnchor:find("BOTTOM") then
         screenAnchorY = screenHeight / 2
     end
 
     local trackerOffsetY = 0
-    if d.trackerAnchor:find("TOP") then
+    if trackerAnchor:find("TOP") then
         trackerOffsetY = frameHeight / 2
-    elseif d.trackerAnchor:find("BOTTOM") then
+    elseif trackerAnchor:find("BOTTOM") then
         trackerOffsetY = -frameHeight / 2
     end
 
@@ -128,11 +135,12 @@ function CurrencyTracker_Mover:Reset()
     if InCombatLockdown() then return end
 
     local d = CT.db.profile.display
+    local screenAnchor, trackerAnchor = NormalizeAnchors(d)
     self.frame:ClearAllPoints()
     self.frame:SetPoint(
-        d.trackerAnchor,
+        trackerAnchor,
         UIParent,
-        d.screenAnchor,
+        screenAnchor,
         d.x,
         d.y
     )
